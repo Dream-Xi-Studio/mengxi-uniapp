@@ -1,7 +1,7 @@
 {
-	"name": "",
+	"name": "mengxi-uniapp",
 	"appid": "",
-	"description": "",
+	"description": "mengxi-uniapp 是一套基于 Uniapp + Vue3 框架开发的兼容多端的多功能库。",
 	"versionName": "1.0.0",
 	"versionCode": "100",
 	"transformPx": false,

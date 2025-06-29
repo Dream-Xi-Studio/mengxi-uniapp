@@ -2,7 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import uni from '@dcloudio/vite-plugin-uni'
 
 import path from 'path'
-function resolve(dir) {
+function resolve(dir: string) {
 	return path.resolve(__dirname, dir)
 }
 
@@ -11,6 +11,8 @@ export default defineConfig(config => {
 	const env = loadEnv(config.mode, process.cwd())
 
 	return {
+		define: {},
+
 		plugins: [uni()],
 
 		resolve: {
@@ -18,14 +20,13 @@ export default defineConfig(config => {
 				'@': resolve('src'),
 				'~': resolve('src'),
 				'@api': resolve('src/api'),
-				'@assets': resolve('src/assets'),
-				'@comp': resolve('src/components'),
+				'@pages': resolve('src/pages'),
+				'@static': resolve('src/static'),
 				'@hooks': resolve('src/hooks'),
 				'@server': resolve('src/server'),
 				'@stores': resolve('src/stores'),
 				'@styles': resolve('src/styles'),
-				'@utils': resolve('src/utils'),
-				'@views': resolve('src/views')
+				'@utils': resolve('src/utils')
 			}
 		},
 
