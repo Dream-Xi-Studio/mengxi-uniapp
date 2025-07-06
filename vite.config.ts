@@ -37,6 +37,7 @@ export default defineConfig(config => {
 				'~': resolve('src'),
 				'@api': resolve('src/api'),
 				'@pages': resolve('src/pages'),
+				'@router': resolve('src/router'),
 				'@static': resolve('src/static'),
 				'@hooks': resolve('src/hooks'),
 				'@server': resolve('src/server'),

@@ -12,10 +12,13 @@ interface InjectIcoOptions {
 /**
  * 注入网站图标链接到 HTML 文件的头部。
  *
- * @param options - 配置选项
+ * @param options - 配置选项（字符串时视为 base）
  * @returns 一个 Vite 插件实例，用于在构建过程中修改 HTML 文件
  */
-export function injectIco(options: InjectIcoOptions = {}): Plugin {
+export function injectIco(options?: InjectIcoOptions | string): Plugin {
+	// 标准化选项
+	const normalizedOptions: InjectIcoOptions = typeof options === 'string' ? { base: options } : options || {}
+
 	return {
 		name: 'inject-ico',
 
@@ -28,15 +31,15 @@ export function injectIco(options: InjectIcoOptions = {}): Plugin {
 		transformIndexHtml(html) {
 			let icoTag: string
 
-			if (options.link) {
+			if (normalizedOptions.link) {
 				// 如果提供了完整的 link 标签，直接使用
-				icoTag = options.link
-			} else if (options.url) {
+				icoTag = normalizedOptions.link
+			} else if (normalizedOptions.url) {
 				// 如果提供了完整 URL，生成标准 link 标签
-				icoTag = `<link rel="icon" href="${options.url}" />`
+				icoTag = `<link rel="icon" href="${normalizedOptions.url}" />`
 			} else {
 				// 使用 base 路径 + 默认 favicon.ico
-				const base = options.base || '/'
+				const base = normalizedOptions.base || '/'
 				icoTag = `<link rel="icon" href="${base}favicon.ico" />`
 			}
 

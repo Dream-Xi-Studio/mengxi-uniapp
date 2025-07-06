@@ -46,11 +46,8 @@
 			"sdkConfigs": {}
 		}
 	},
-	"h5": {
-		"devServer": {
-			"https": true
-		}
-	},
+	/** web特有相关 */
+	"h5": {},
 	/* 快应用特有相关 */
 	"quickapp": {},
 	/* 小程序特有相关 */

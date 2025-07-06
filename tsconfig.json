@@ -8,6 +8,7 @@
 			"~/*": ["./src/*"],
 			"@api/*": ["./src/api/*"],
 			"@pages/*": ["./src/pages/*"],
+			"@router/*": ["./src/router/*"],
 			"@static/*": ["./src/static/*"],
 			"@hooks/*": ["./src/hooks/*"],
 			"@server/*": ["./src/server/*"],

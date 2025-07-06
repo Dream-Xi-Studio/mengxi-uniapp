@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<image class="logo" src="/static/logo.png" />
-		<view class="text-area" @click="toTest">
+		<view class="text-area">
 			<text class="title">{{ title }}</text>
 		</view>
 	</view>
@@ -9,15 +9,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import uniRouter from '@/router'
-
 const title = ref('Hello')
-
-function toTest() {
-	uniRouter.push({
-		path: '/pages/test/test'
-	})
-}
 </script>
 
 <style lang="scss">
