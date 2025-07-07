@@ -1,5 +1,5 @@
-import UniRouter from './uni-router'
+import MxRouter from './mx-router'
 
-const uniRouter = new UniRouter()
+const mxRouter = new MxRouter()
 
-export default uniRouter
+export default mxRouter

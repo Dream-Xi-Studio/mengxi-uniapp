@@ -20,7 +20,7 @@ declare interface RouteLocation {
 declare type RouteLocationRaw = string | RouteLocation
 
 /** uni-app路由跳转方法类型 */
-declare type UniRouterMethod = 'navigateTo' | 'redirectTo' | 'reLaunch' | 'switchTab' | 'navigateBack'
+declare type MxRouterMethod = 'navigateTo' | 'redirectTo' | 'reLaunch' | 'switchTab' | 'navigateBack'
 
 /** 当前路由信息 */
 declare interface Route {
@@ -33,13 +33,19 @@ declare interface Route {
 }
 
 /**
+ * 路由导航守卫函数的回调参数
+ * @param valid 导航是否有效，为false时取消导航，为字符串时重定向到指定路径，为RouteLocationRaw对象时进行路由跳转
+ */
+declare type NavigationGuardNextCallback = (valid?: boolean | string | RouteLocationRaw | void) => void
+
+/**
  * 路由导航守卫函数
  * @param to 即将进入的路由
  * @param from 当前导航正要离开的路由
  * @param next 调用该方法来 resolve 这个钩子
  * @returns 可返回Promise或直接返回boolean/void
  */
-declare type NavigationGuard = (to: Route, from: Route | null, next: (result?: boolean | void) => void) => Promise<boolean | void> | boolean | void
+declare type NavigationGuard = (to: Route, from: Route | null, next: NavigationGuardNextCallback) => Promise<boolean | void> | boolean | void
 
 /**
  * 路由后置钩子函数
@@ -49,15 +55,15 @@ declare type NavigationGuard = (to: Route, from: Route | null, next: (result?: b
 declare type AfterEachHook = (to: Route, from: Route | null) => void
 
 /** 路由构造器选项 */
-declare interface UniRouterOptions {
+declare interface MxRouterOptions {
 	/** 路由配置数组 */
 	routes?: RouteConfig[]
 }
 
 /** uni-app路由类接口 */
-declare class UniRouterInterface {
+declare class MxRouterInterface {
 	/** 构造函数 */
-	constructor(options?: UniRouterOptions)
+	constructor(options?: MxRouterOptions)
 
 	/** 跳转到指定页面（保留当前页面） */
 	push(location: RouteLocationRaw): Promise<void>
@@ -85,4 +91,27 @@ declare class UniRouterInterface {
 
 	/** 获取当前路由信息 */
 	getCurrentRoute(): Route | null
+}
+
+/** 路由错误类型 */
+declare enum MxRouterErrorType {
+	/** 导航中止 */
+	NAVIGATION_ABORTED = 'NAVIGATION_ABORTED',
+	/** 导航重定向 */
+	NAVIGATION_REDIRECT = 'NAVIGATION_REDIRECT',
+	/** 导航失败 */
+	NAVIGATION_FAILED = 'NAVIGATION_FAILED',
+	/** 无效方法 */
+	INVALID_METHOD = 'INVALID_METHOD'
+}
+
+/** 路由错误类 */
+declare class MxRouterError extends Error {
+	/**
+	 * 构造函数
+	 * @param type 错误类型
+	 * @param message 错误消息
+	 * @param location 目标位置
+	 */
+	constructor(type: MxRouterErrorType, message: string, location?: string | RouteLocationRaw)
 }

@@ -9,12 +9,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import uniRouter from '@/router'
+import router from '@/router'
 
 const title = ref('Hello')
 
 function toTest() {
-	uniRouter.push({
+	router.push({
 		path: '/pages/test/test'
 	})
 }

@@ -1,5 +1,7 @@
+import { MxRouterError } from './mx-router-error'
+
 /** uni-app 路由实现类 */
-class UniRouter implements UniRouterInterface {
+class MxRouter implements MxRouterInterface {
 	/** 路由配置列表 */
 	private routes: RouteConfig[]
 	/** 全局前置守卫列表 */
@@ -11,7 +13,7 @@ class UniRouter implements UniRouterInterface {
 	 * 创建路由实例
 	 * @param options 路由配置选项
 	 */
-	constructor(options: UniRouterOptions = {}) {
+	constructor(options: MxRouterOptions = {}) {
 		this.routes = options.routes || []
 		this.beforeEachHooks = []
 		this.afterEachHooks = []
@@ -120,7 +122,7 @@ class UniRouter implements UniRouterInterface {
 	 * @param location 目标位置
 	 * @param method 跳转方法
 	 */
-	private async navigate(location: RouteLocationRaw, method: UniRouterMethod): Promise<void> {
+	private async navigate(location: RouteLocationRaw, method: MxRouterMethod): Promise<void> {
 		const { path, query } = this.parseLocation(location)
 		const from = this.getCurrentRoute()
 		const to: Route = {
@@ -131,17 +133,22 @@ class UniRouter implements UniRouterInterface {
 
 		// 执行全局前置守卫
 		for (const hook of this.beforeEachHooks) {
-			const result = await hook(to, from, () => {})
-			if (result === false) {
-				return Promise.reject(new Error('Navigation aborted by guard'))
+			try {
+				await this.runGuard(hook, to, from)
+			} catch (err) {
+				if (err instanceof MxRouterError && err.type === MxRouterErrorType.NAVIGATION_REDIRECT && err.location) {
+					// 处理重定向
+					return this.push(err.location as RouteLocationRaw)
+				}
+				return Promise.reject(err)
 			}
 		}
 
 		try {
 			if (method === 'switchTab') {
-				await this.callUniMethod('switchTab', this.buildUrl(path))
+				await this.callMxMethod('switchTab', this.buildUrl(path))
 			} else {
-				await this.callUniMethod(method, to.fullPath)
+				await this.callMxMethod(method, to.fullPath)
 			}
 
 			// 执行全局后置钩子
@@ -149,8 +156,50 @@ class UniRouter implements UniRouterInterface {
 				hook(to, from)
 			}
 		} catch (err) {
-			return Promise.reject(err)
+			return Promise.reject(MxRouterError.navigationFailed(err instanceof Error ? err.message : String(err)))
 		}
+	}
+
+	/**
+	 * 执行单个守卫
+	 * @private
+	 * @param guard 守卫函数
+	 * @param to 目标路由
+	 * @param from 来源路由
+	 */
+	private runGuard(guard: NavigationGuard, to: Route, from: Route | null): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const next: NavigationGuardNextCallback = valid => {
+				if (valid === false) {
+					reject(MxRouterError.navigationAborted())
+				} else if (typeof valid === 'string' || (typeof valid === 'object' && valid !== null && !(valid instanceof Error))) {
+					reject(MxRouterError.navigationRedirect(valid))
+				} else {
+					resolve()
+				}
+			}
+
+			try {
+				const guardResult = guard(to, from, next)
+
+				// 处理守卫返回值
+				if (guardResult !== undefined) {
+					Promise.resolve(guardResult)
+						.then(resolvedValue => {
+							if (resolvedValue === false) {
+								reject(MxRouterError.navigationAborted())
+							} else if (typeof resolvedValue === 'string' || (typeof resolvedValue === 'object' && resolvedValue !== null)) {
+								reject(MxRouterError.navigationRedirect(resolvedValue))
+							} else {
+								resolve()
+							}
+						})
+						.catch(reject)
+				}
+			} catch (err) {
+				reject(err)
+			}
+		})
 	}
 
 	/**
@@ -159,14 +208,16 @@ class UniRouter implements UniRouterInterface {
 	 * @param method 方法名
 	 * @param url 目标URL
 	 */
-	private callUniMethod(method: UniRouterMethod, url: string): Promise<void> {
+	private callMxMethod(method: MxRouterMethod, url: string): Promise<void> {
 		return new Promise((resolve, reject) => {
 			const uniNav = uni[method]
 			if (typeof uniNav === 'function') {
 				// 明确使用 Promise 版本的重载
-				;(uniNav as (options: { url: string }) => Promise<void>)({ url }).then(resolve).catch(reject)
+				;(uniNav as (options: { url: string }) => Promise<void>)({ url })
+					.then(resolve)
+					.catch(err => reject(MxRouterError.navigationFailed(err instanceof Error ? err.message : String(err))))
 			} else {
-				reject(new Error(`Navigation method ${method} not available`))
+				reject(MxRouterError.invalidMethod(method))
 			}
 		})
 	}
@@ -223,4 +274,4 @@ class UniRouter implements UniRouterInterface {
 	}
 }
 
-export default UniRouter
+export default MxRouter
