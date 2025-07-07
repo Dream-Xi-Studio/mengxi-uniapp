@@ -5,16 +5,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],
-			"~/*": ["./src/*"],
-			"@api/*": ["./src/api/*"],
-			"@pages/*": ["./src/pages/*"],
-			"@router/*": ["./src/router/*"],
-			"@static/*": ["./src/static/*"],
-			"@hooks/*": ["./src/hooks/*"],
-			"@server/*": ["./src/server/*"],
-			"@stores/*": ["./src/stores/*"],
-			"@styles/*": ["./src/styles/*"],
-			"@utils/*": ["./src/utils/*"]
+			"~/*": ["./src/*"]
 		},
 		"lib": ["esnext", "dom"],
 		"types": ["@dcloudio/types"]

@@ -34,16 +34,7 @@ export default defineConfig(config => {
 		resolve: {
 			alias: {
 				'@': resolve('src'),
-				'~': resolve('src'),
-				'@api': resolve('src/api'),
-				'@pages': resolve('src/pages'),
-				'@router': resolve('src/router'),
-				'@static': resolve('src/static'),
-				'@hooks': resolve('src/hooks'),
-				'@server': resolve('src/server'),
-				'@stores': resolve('src/stores'),
-				'@styles': resolve('src/styles'),
-				'@utils': resolve('src/utils')
+				'~': resolve('src')
 			}
 		},
 
