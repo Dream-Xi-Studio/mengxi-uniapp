@@ -1,5 +1,5 @@
 import MxRouter from './mx-router'
 
-const mxRouter = new MxRouter()
+const router = new MxRouter()
 
-export default mxRouter
+export default router
