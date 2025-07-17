@@ -5,14 +5,14 @@
 	"main": "main.ts",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Dream-Xi-Studio/mengxi-uniapp.git"
+		"url": "git+https://github.com/MengXi-Studio/MengXi-uniapp.git"
 	},
 	"author": "PedroQue99",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/Dream-Xi-Studio/mengxi-uniapp/issues"
+		"url": "https://github.com/MengXi-Studio/MengXi-uniapp/issues"
 	},
-	"homepage": "https://github.com/Dream-Xi-Studio/mengxi-uniapp#readme",
+	"homepage": "https://github.com/MengXi-Studio/MengXi-uniapp#readme",
 	"scripts": {
 		"dev:app": "uni -p app",
 		"dev:custom": "uni -p",
