@@ -15,7 +15,11 @@ const title = ref('Hello')
 
 function toTest() {
 	router.push({
-		path: '/pages/test/test'
+		path: '/pages/test/test',
+		query: {
+			name: 'Test User',
+			age: 25
+		}
 	})
 }
 </script>
