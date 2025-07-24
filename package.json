@@ -66,7 +66,7 @@
 		"@dcloudio/uni-mp-weixin": "3.0.0-4070520250711001",
 		"@dcloudio/uni-mp-xhs": "3.0.0-4070520250711001",
 		"@dcloudio/uni-quickapp-webview": "3.0.0-4070520250711001",
-		"@meng-xi/uni-router": "^0.1.0",
+		"@meng-xi/uni-router": "^0.1.3",
 		"@vueuse/core": "^13.5.0",
 		"dayjs": "^1.11.13",
 		"lodash": "^4.17.21",

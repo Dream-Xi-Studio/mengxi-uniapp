@@ -1,5 +1,5 @@
-import { MxRouter } from '@meng-xi/uni-router'
+import { Router } from '@meng-xi/uni-router'
 
-const router = new MxRouter()
+const router = new Router()
 
 export default router
